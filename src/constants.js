@@ -1,0 +1,8 @@
+export const Actions = {
+  OPEN_TAB: 'OPEN_TAB',
+  
+  SET_FIRST_NAME: 'SET_FIRST_NAME',
+  SET_LAST_NAME: 'SET_LAST_NAME',
+  SET_PHONE: 'SET_PHONE',
+  SET_EMAIL: 'SET_EMAIL',
+}
