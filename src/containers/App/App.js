@@ -11,7 +11,9 @@ import { Actions } from '../../constants';
 class App extends Component {
 
   handleChange = (event, value) => {
-    this.props.openTab(value);
+    if (!value) {
+      this.props.openTab(value);
+    }
   };
 
   render() {
@@ -26,7 +28,7 @@ class App extends Component {
           onChange={this.handleChange}
         >
           <Tab label="Основные данные" />
-          <Tab label="Адрес доставки" />
+          <Tab disabled={value !== 1} label="Адрес доставки" />
         </Tabs>
         {value === 0 && <PersonForm></PersonForm>}
         {value === 1 && <div><DeliveryForm></DeliveryForm></div>}
@@ -43,6 +45,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     openTab: (index) => {
       dispatch({ type: Actions.OPEN_TAB, payload: { tabIndex: index } });
+    },
+    clearDeliveryInfo: () => {
+      dispatch({ type: Actions.CLEAR_DELIVERY_INFO })
     }
   }
 }

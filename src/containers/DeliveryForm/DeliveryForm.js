@@ -1,120 +1,126 @@
 import React, { Component } from 'react';
 
 import FormControl from '@material-ui/core/FormControl';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 
 import './DeliveryForm.scss';
 
 class DeliveryForm extends Component {
+
+  handleSubmit(evt) {
+    // TODO: add API call
+  }
+
+  onIsPickupChange(evt) {
+    this.props.setIsPickup(evt.target.value);
+  }
+  onCountryChange(evt) {
+    this.props.setCountry(evt.target.value);
+  }
+  onCityChange(evt) {
+    this.props.setCity(evt.target.value);
+  }
+  onIndexChange(evt) {
+    this.props.setIndex(evt.target.value);
+  }
+  onAddressChange(evt) {
+    this.props.setAddress(evt.target.value);
+  }
+  onDateChange(evt) {
+    this.props.setDate(evt.target.value);
+  }
+  onCommentChange(evt) {
+    this.props.setComment(evt.target.value);
+  }
+
   render() {
     const name = "";
 
     return (
       <div className="DeliveryForm">
-        <Grid container spacing={24}>
-          <Grid item xs={12}>
-            <FormControl component="fieldset">
-              <RadioGroup
-                aria-label="Доставка"
-                name="deliveryType"
-                onChange={this.handleChange}
-              >
-                <FormControlLabel value="delivery" control={<Radio />} label="Доставка" />
-                <FormControlLabel value="pickup" control={<Radio />} label="Самовывоз" />
-              </RadioGroup>
-            </FormControl>
-          </Grid>
-          <Grid item xs={4}>
-            <FormControl 
-              error={name === ''}
-              fullWidth={true}>
-              <InputLabel htmlFor="component-error">Страна</InputLabel>
-              <Input
-                id="component-error"
-                value={name}
-                onChange={this.handleChange}
-                aria-describedby="component-error-text"
-              />
-
-              <FormHelperText id="component-error-text">Поле <b>Страна</b> обязательно для заполнения</FormHelperText>
-            </FormControl>
-          </Grid>
-          <Grid item xs={4}>
-            <FormControl 
-              error={name === ''}
-              fullWidth={true}>
-              <InputLabel htmlFor="component-error">Город</InputLabel>
-              <Input
-                id="component-error"
-                value={name}
-                onChange={this.handleChange}
-                aria-describedby="component-error-text"
+        <ValidatorForm
+          ref="form"
+          onSubmit={this.handleSubmit.bind(this)}
+        >
+          <Grid container spacing={24}>
+            <Grid item xs={12}>
+              <FormControl component="fieldset">
+                <RadioGroup
+                  aria-label="Доставка"
+                  name="deliveryType"
+                  onChange={this.handleChange}
+                >
+                  <FormControlLabel value="delivery" control={<Radio />} label="Доставка" />
+                  <FormControlLabel value="pickup" control={<Radio />} label="Самовывоз" />
+                </RadioGroup>
+              </FormControl>
+            </Grid>
+            <Grid item sm={4} xs={12}>
+              Селект города будет здесь
+            </Grid>
+            <Grid item sm={4} xs={12}>
+              <TextValidator
+                label="Город"
                 placeholder="Москва"
+                onChange={this.onCityChange.bind(this)}
+                name="city"
+                value={this.props.city}
+                fullWidth
+                validators={['required', 'maxStringLength:255']}
+                errorMessages={[<label>Поле <b>Город</b> обязательно для заполнения</label>, <label>Слишком длинное название <b>Города</b></label>]}
               />
-
-              <FormHelperText id="component-error-text">Поле <b>Город</b> обязательно для заполнения</FormHelperText>
-            </FormControl>
-          </Grid>
-          <Grid item xs={4}>
-            <FormControl 
-              error={name === ''}
-              fullWidth={true}>
-              <InputLabel htmlFor="component-error">Индекс</InputLabel>
-              <Input
-                id="component-error"
-                value={name}
-                onChange={this.handleChange}
-                aria-describedby="component-error-text"
+            </Grid>
+            <Grid item sm={4} xs={12}>
+              <TextValidator
+                label="Индекс"
+                placeholder="398000"
+                onChange={this.onIndexChange.bind(this)}
+                name="index"
+                value={this.props.index}
+                fullWidth
+                validators={['required', 'maxStringLength:6', 'minStringLength:6']}
+                errorMessages={[<label>Поле <b>Индекс</b> обязательно для заполнения</label>, <label>Неправильный <b>Индекс</b></label>, <label>Неправильный <b>Индекс</b></label>]}
               />
-
-              <FormHelperText id="component-error-text">Поле <b>Индекс</b> обязательно для заполнения</FormHelperText>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12}>
-            <FormControl 
-              error={name === ''}
-              fullWidth={true}>
-              <InputLabel htmlFor="component-error">Телефон</InputLabel>
-              <Input
-                id="component-error"
-                value={name}
-                onChange={this.handleChange}
-                aria-describedby="component-error-text"
-                placeholder="+79046524783"
+            </Grid>
+            <Grid item xs={12}>
+              <TextValidator
+                label="Адрес"
+                placeholder="г.Москва, ул. Космонавтов, 14/5"
+                onChange={this.onAddressChange.bind(this)}
+                name="address"
+                value={this.props.address}
+                fullWidth
+                validators={['required', 'maxStringLength:6']}
+                errorMessages={[<label>Поле <b>Адрес</b> обязательно для заполнения</label>, <label>Слишком длинный <b>Адрес</b></label>]}
               />
-
-              <FormHelperText id="component-error-text">Поле <b>Телефон</b> обязательно для заполнения</FormHelperText>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12}>
-            <FormControl 
-              error={name === ''}
-              fullWidth={true}>
-              <InputLabel htmlFor="component-error">Email</InputLabel>
-              <Input
-                id="component-error"
-                value={name}
-                onChange={this.handleChange}
-                aria-describedby="component-error-text"
-                placeholder="example@example.com"
+            </Grid>
+            <Grid item xs={12}>
+              <TextValidator
+                label="Дата доставки"
+                placeholder="24/05/2017"
+                onChange={this.onDateChange.bind(this)}
+                name="date"
+                value={this.props.date}
+                fullWidth
+                validators={['required', 'matchRegexp:^[0-3][0-9]\\/[0-1][0-9]\\/20[1-2][0-9]$']}
+                errorMessages={[<label>Поле <b>Дата доставки</b> обязательно для заполнения</label>, <label>Неверная <b>Дата</b></label>]}
               />
+            </Grid>
+            <Grid item xs={12}>
 
-              <FormHelperText id="component-error-text">Поле <b>Телефон</b> обязательно для заполнения</FormHelperText>
-            </FormControl>
+            </Grid>
           </Grid>
-        </Grid>
-        <Grid item xs={12} className="btn-section">
-          <Button variant="contained" color="primary">
-            Оформить заказ
+          <Grid item xs={12} className="btn-section">
+            <Button type="submit" variant="contained" color="primary">
+              Оформить заказ
           </Button>
-        </Grid>
+          </Grid>
+        </ValidatorForm>
       </div>
     );
   }
