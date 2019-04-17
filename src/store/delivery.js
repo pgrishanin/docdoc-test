@@ -22,6 +22,12 @@ const deliveryReducer = (state = initialState, action) => {
         ...initialState
       }
 
+    case Actions.SET_IS_PICKUP:
+      return {
+        ...state,
+        isPickup: action.payload.isPickup
+      }
+
     default: {
       return state
     }
