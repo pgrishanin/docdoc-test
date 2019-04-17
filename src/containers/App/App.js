@@ -12,6 +12,7 @@ class App extends Component {
 
   handleChange = (event, value) => {
     if (!value) {
+      this.props.clearDeliveryInfo();
       this.props.openTab(value);
     }
   };

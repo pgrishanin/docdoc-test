@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 
-import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import { connect } from 'react-redux';
 
+import { Actions } from '../../constants';
 import './DeliveryForm.scss';
 
 class DeliveryForm extends Component {
@@ -17,7 +22,12 @@ class DeliveryForm extends Component {
   }
 
   onIsPickupChange(evt) {
-    this.props.setIsPickup(evt.target.value);
+    if (evt.target.value == 'delivery') {
+      this.props.setIsPickup(false);
+    } else {
+      this.props.setIsPickup(true);
+    }
+    
   }
   onCountryChange(evt) {
     this.props.setCountry(evt.target.value);
@@ -39,8 +49,6 @@ class DeliveryForm extends Component {
   }
 
   render() {
-    const name = "";
-
     return (
       <div className="DeliveryForm">
         <ValidatorForm
@@ -53,15 +61,31 @@ class DeliveryForm extends Component {
                 <RadioGroup
                   aria-label="Доставка"
                   name="deliveryType"
-                  onChange={this.handleChange}
+                  onChange={this.onIsPickupChange.bind(this)}
                 >
-                  <FormControlLabel value="delivery" control={<Radio />} label="Доставка" />
-                  <FormControlLabel value="pickup" control={<Radio />} label="Самовывоз" />
+                  <FormControlLabel checked={!this.props.isPickup} value="delivery" control={<Radio />} label="Доставка" />
+                  <FormControlLabel checked={this.props.isPickup} value="pickup" control={<Radio />} label="Самовывоз" />
                 </RadioGroup>
               </FormControl>
             </Grid>
             <Grid item sm={4} xs={12}>
-              Селект города будет здесь
+              <FormControl fullWidth className="country-select">
+                <Select
+                  value={this.props.country}
+                  onChange={this.handleChange}
+                  fullWidth
+                  displayEmpty
+                  inputProps={{
+                    name: 'country',
+                    id: 'country',
+                  }}
+                >
+                  <MenuItem disabled value=''>Не выбрано</MenuItem>
+                  {this.props.countryList.map(country => 
+                    <MenuItem key={country} value={country}>{country}</MenuItem>
+                  )}
+                </Select>
+              </FormControl>
             </Grid>
             <Grid item sm={4} xs={12}>
               <TextValidator
@@ -126,4 +150,37 @@ class DeliveryForm extends Component {
   }
 }
 
-export default DeliveryForm;
+const mapStateToProps = (state) => {
+  return state.delivery
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setIsPickup: (isPickup) => {
+      dispatch({ type: Actions.SET_IS_PICKUP, payload: { isPickup } })
+    },
+    setCountry: (country) => {
+      dispatch({ type: Actions.SET_COUNTRY, payload: { country } })
+    },
+    setCity: (city) => {
+      dispatch({ type: Actions.SET_CITY, payload: { city } })
+    },
+    setIndex: (index) => {
+      dispatch({ type: Actions.SET_INDEX, payload: { index } })
+    },
+    setAddress: (address) => {
+      dispatch({ type: Actions.SET_ADDRESS, payload: { address } });
+    },
+    setDate: (date) => {
+      dispatch({ type: Actions.SET_DATE, payload: { date } });
+    },
+    setComment: (commment) => {
+      dispatch({ type: Actions.SET_COMMENT, payload: { commment } });
+    },
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DeliveryForm);
